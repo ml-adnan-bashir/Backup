@@ -7,6 +7,104 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="advanced-animations.css">
+
+  <!-- Project tiles: self-contained styles; existing site styles stay intact. -->
+  <style id="project-tiles-styles">
+    #project-tiles {
+      --pt-text: #f4f6ff;
+      box-sizing: border-box;
+      position: relative;
+      isolation: isolate;
+      width: min(1200px, calc(100% - 40px));
+      margin: 48px auto 64px;
+      padding: 28px;
+      scroll-margin-top: 100px;
+      border: 1px solid #31374b;
+      border-radius: 26px;
+      background: #10131d;
+      color: var(--pt-text);
+      font-family: 'Poppins', system-ui, sans-serif;
+      box-shadow: 0 18px 45px #00000030;
+      text-align: left;
+    }
+    #project-tiles *, #project-tiles *::before, #project-tiles *::after { box-sizing: border-box; }
+    #project-tiles .pt-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 20px; margin-bottom: 24px; }
+    #project-tiles h2 { margin: 0; padding: 0; font: 600 clamp(1.5rem, 3vw, 2rem)/1.25 'Poppins', system-ui, sans-serif; color: var(--pt-text); letter-spacing: -.03em; }
+    #project-tiles .pt-help { margin: 0; max-width: 38ch; color: #b6bfd6; font-size: .875rem; line-height: 1.65; }
+    #project-tiles .pt-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
+    #project-tiles .pt-grid > li { min-width: 0; margin: 0; padding: 0; display: flex; }
+    #project-tiles .pt-tile {
+      --pt-accent: #b9c6ff; --pt-base: #25356e; --pt-deep: #142144;
+      display: block; width: 100%; min-width: 0; position: relative; perspective: 1200px;
+      color: #fff; text-decoration: none; border-radius: 18px;
+      transition: transform .25s ease; -webkit-tap-highlight-color: transparent;
+    }
+    #project-tiles .pt-tile:focus-visible { outline: 3px solid #f4e8a7; outline-offset: 5px; }
+    #project-tiles .pt-inner {
+      display: grid; height: 100%; min-height: 218px; position: relative;
+      transform-style: preserve-3d; -webkit-transform-style: preserve-3d;
+      transition: transform .65s cubic-bezier(.2,.7,.15,1);
+    }
+    #project-tiles .pt-face {
+      display: flex; flex-direction: column; grid-area: 1 / 1; min-width: 0;
+      padding: 20px; border: 1px solid #ffffff25; border-radius: 18px;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      box-shadow: 0 7px 0 #03061155, 0 15px 24px #00000045, inset 0 1px 0 #ffffff20;
+      overflow-wrap: anywhere;
+    }
+    #project-tiles .pt-front { position: relative; background-color: var(--pt-base); background-image: linear-gradient(135deg, #ffffff0a, #00000022); transform: rotateY(0deg); }
+    #project-tiles .pt-front::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      background-image: radial-gradient(#ffffff2c .8px, transparent .9px); background-size: 8px 8px; opacity: .45;
+    }
+    #project-tiles .pt-front > * { position: relative; }
+    #project-tiles .pt-back { background: linear-gradient(150deg, var(--pt-base), var(--pt-deep)); transform: rotateY(180deg); }
+    #project-tiles .pt-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 18px; }
+    #project-tiles .pt-category { font-size: .875rem; line-height: 1.35; color: #ffffffed; }
+    #project-tiles .pt-number { font: .75rem/1.4 'Space Mono', ui-monospace, monospace; color: #ffffffe0; }
+    #project-tiles .pt-mark { font: 700 2.4rem/1 'Space Mono', ui-monospace, monospace; color: var(--pt-accent); letter-spacing: -.06em; margin-bottom: 18px; }
+    #project-tiles .pt-title { display: block; margin: 0 0 12px; font-size: 1.15rem; font-weight: 600; line-height: 1.35; color: #fff; letter-spacing: -.015em; }
+    #project-tiles .pt-cue { margin-top: auto; font-size: .875rem; line-height: 1.4; color: #ffffffe6; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    #project-tiles .pt-rotate { font-size: 1.25rem; line-height: 1; }
+    #project-tiles .pt-description { display: block; margin: 0 0 20px; font-size: 1rem; line-height: 1.55; color: #f0f3ff; }
+    #project-tiles .pt-open { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid #ffffff40; font-size: .875rem; font-weight: 600; color: #fff; }
+    #project-tiles .pt-touch-copy { display: none; }
+    #project-tiles .pt-tile.is-flipped .pt-inner,
+    #project-tiles .pt-tile:focus-visible:not(.is-dismissed) .pt-inner { transform: rotateY(180deg); }
+    #project-tiles li:nth-child(8n+2) .pt-tile { --pt-accent: #b3efe0; --pt-base: #14565a; --pt-deep: #0c3038; }
+    #project-tiles li:nth-child(8n+3) .pt-tile { --pt-accent: #ffe2a2; --pt-base: #75501c; --pt-deep: #412d15; }
+    #project-tiles li:nth-child(8n+4) .pt-tile { --pt-accent: #efc2fa; --pt-base: #583466; --pt-deep: #301f43; }
+    #project-tiles li:nth-child(8n+5) .pt-tile { --pt-accent: #ffcabd; --pt-base: #853a34; --pt-deep: #482222; }
+    #project-tiles li:nth-child(8n+6) .pt-tile { --pt-accent: #bddfff; --pt-base: #225572; --pt-deep: #173147; }
+    #project-tiles li:nth-child(8n+7) .pt-tile { --pt-accent: #e5ceff; --pt-base: #4a3a80; --pt-deep: #292247; }
+    #project-tiles li:nth-child(8n+8) .pt-tile { --pt-accent: #d7efa0; --pt-base: #3b552e; --pt-deep: #213322; }
+    #project-tiles li:nth-child(5n+2) .pt-front::before { background-image: repeating-linear-gradient(135deg, #ffffff26 0 1px, transparent 1px 10px); background-size: auto; opacity: .5; }
+    #project-tiles li:nth-child(5n+3) .pt-front::before { background-image: linear-gradient(#ffffff22 1px, transparent 1px), linear-gradient(90deg, #ffffff22 1px, transparent 1px); background-size: 18px 18px; opacity: .45; }
+    #project-tiles li:nth-child(5n+4) .pt-front::before { background-image: repeating-linear-gradient(0deg, #ffffff20 0 1px, transparent 1px 4px), repeating-linear-gradient(90deg, #ffffff10 0 1px, transparent 1px 4px); background-size: auto; opacity: .65; }
+    #project-tiles li:nth-child(5n+5) .pt-front::before { background-image: repeating-radial-gradient(circle at 100% 0, transparent 0 17px, #ffffff25 18px 19px, transparent 20px 36px); background-size: auto; opacity: .4; }
+    @media (hover: hover) and (pointer: fine) {
+      #project-tiles .pt-tile:hover { transform: translateY(-5px); z-index: 2; }
+      #project-tiles .pt-tile:hover:not(.is-dismissed) .pt-inner { transform: rotateY(180deg); }
+    }
+    @media (hover: none), (pointer: coarse) {
+      #project-tiles .pt-desktop-copy { display: none; }
+      #project-tiles .pt-touch-copy { display: inline; }
+    }
+    @media (max-width: 1000px) { #project-tiles .pt-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 740px) { #project-tiles { width: calc(100% - 24px); padding: 20px; border-radius: 22px; } #project-tiles .pt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
+    @media (max-width: 460px) { #project-tiles { padding: 16px; margin-top: 28px; } #project-tiles .pt-grid { grid-template-columns: minmax(0, 1fr); } #project-tiles .pt-inner { min-height: 210px; } }
+    @media (prefers-reduced-motion: reduce) { #project-tiles .pt-tile, #project-tiles .pt-inner { transition: none; } #project-tiles .pt-tile:hover { transform: none; } }
+    @media print {
+      #project-tiles { background: white; color: black; box-shadow: none; width: 100%; padding: 0; border: 0; }
+      #project-tiles h2, #project-tiles .pt-help { color: black; }
+      #project-tiles .pt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #project-tiles .pt-inner { display: block; min-height: 0; transform: none !important; }
+      #project-tiles .pt-front { display: none; }
+      #project-tiles .pt-back { transform: none; background: white; box-shadow: none; border: 1px solid #888; }
+      #project-tiles .pt-back * { color: black; }
+      #project-tiles li { break-inside: avoid; }
+    }
+  </style>
 </head>
 <body>
   <!-- Blurred Background Image -->
@@ -31,97 +129,22 @@
 
 
 
-<!-- 
-  <nav class="navbar">
-  <div class="nav-container">
-    <div class="nav-logo">
-      <a href="index.html">AADI</a>
-    </div>
-    
-    <ul class="nav-menu">
-            <li><a href="nts.html" class="nav-link">NTS</a></li>
-            <li><a href="zarb.html" class="nav-link">ZARB BPM</a></li>
-            <li><a href="net_june_16.html" class="nav-link">NET_BENCHMARK</a></li>
-            <li><a href="bb.html" class="nav-link">BLACK BONE</a></li>
 
-    </ul>
-
-    <div class="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
-</nav> -->
 
 
 
 
   
-  <nav class="navbar">
+  <nav class="navbar" aria-label="Main navigation">
     <div class="nav-container">
-      <div class="nav-logo">
-        <a href="index.html">AADI</a>
-      </div>
-    <ul class="nav-menu">
-      <li><a href="bns.html" class="nav-link">Boundary n States 2</a></li>
-            <li><a href="feature-selection-lab.html" class="nav-link">Boundary n States</a></li>
-            <li><a href="net_june_16.html" class="nav-link">NET_BENCHMARK</a></li>
-            <li><a href="bb.html" class="nav-link">BLACK BONE</a></li>
-            <li><a href="original.html" class="nav-link">O for Original</a></li>
-    </ul>
-      </li>
-        <li class="nav-dropdown">
-          <a href="#" class="nav-link">ALL PROJECTS <span class="dropdown-arrow">▼</span></a>
-          <ul class="dropdown-menu">
-            <li><a href="index.html" class="nav-link active">HOME</a></li>
-            <li><a href="journey.html" class="nav-link">JOURNEY</a></li>
-            <li><a href="interests.html" class="nav-link">INTERESTS</a></li>
-            <li><a href="projects.html" class="nav-link">PROJECTS</a></li>
-            <li><a href="publications.html" class="nav-link">PUBLICATIONS</a></li>
-            <li><a href="research.html" class="nav-link">RESEARCH</a></li>
-            <li><a href="teaching.html" class="nav-link">TEACHING</a></li>
-            <li><a href="nts.html" class="nav-link">NTS</a></li>
-            <li><a href="net_last.html" class="nav-link">NET_LAST</a></li>
-            <li><a href="choices.html" class="nav-link">NET_2</a></li>
-            <li><a href="no_choices.html" class="nav-link">NET 1</a></li>
-            <li><a href="zarb.html" class="nav-link">ZARB BPM</a></li>
-            <li><a href="net_latest.html" class="nav-link">Net Prep 1</a></li>
-            <li><a href="net_june_16.html" class="nav-link">Net Benchmark</a></li>
-            <li><a href="net_june_16_checker.html" class="nav-link">Benchmark Checker</a></li>
-            <li><a href="BuySell_Marketing_Lab.html" class="nav-link">CRYPTO_BY_BILAL</a></li>
-            <li><a href="bb.html" class="nav-link">Black Bone</a></li>
-            <li><a href="NET_easy_june_24.html" class="nav-link">NET_june_24</a></li>
-            <li><a href="NET_easy_june_24a.html" class="nav-link">NET_june_24</a></li>
-            <li><a href="bb.html" class="nav-link">BLACK BONE</a></li>
-            <li><a href="net_latest.html" class="nav-link">NET_PREP_1</a></li>
-            <li><a href="net_june_16.html" class="nav-link">NET_BENCHMARK</a></li>
-            <li><a href="net_june_16_checker.html" class="nav-link">NET_BENCHMARK_CHECKER</a></li>
-            <li><a href="ncsa_4.html" class="nav-link">NCSA DEMO</a></li>
-            <li><a href="net.html" class="nav-link">NET_BENCHMARK</a></li>
-            <li><a href="final.html" class="nav-link">LAST</a></li>
-            <li><a href="fast.html" class="nav-link">FAST</a></li>
-            <li><a href="nts.html" class="nav-link">NTS</a></li>
-            <li><a href="net_june_16.html" class="nav-link">NET_BENCHMARK</a></li>
-            <li><a href="bb.html" class="nav-link">BLACK BONE</a></li>
-            <li><a href="air.html" class="nav-link">AIR</a></li>
-            <li><a href="pdfs/notes.html" class="nav-link">NOTES</a></li>
-            <li><a href="zarb.html" class="nav-link">ZARB BPM</a></li>
-            <li><a href="ce.html" class="nav-link">CANTT EVENTS</a></li>
-            <li><a href="speedtest.html" class="nav-link">RAFTAAR</a></li>
-            <li><a href="scale.html" class="nav-link">SCALE</a></li>
-            <li><a href="games.html" class="nav-link">GAMES</a></li>
-            <li><a href="memes.html" class="nav-link">MEMES</a></li>
-            <li><a href="drawings.html" class="nav-link">DRAWINGS</a></li>
-            <li><a href="gallery.html" class="nav-link">GALLERY</a></li>
-          </ul>
-        </li>
-        <li><a href="index.html#contact" class="nav-link cta-button">Contact</a></li>
+      <div class="nav-logo"><a href="index.html">AADI</a></div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link active" aria-current="page">HOME</a></li>
+        <li><a href="#project-tiles" class="nav-link">ALL PROJECTS</a></li>
+        <li><a href="#contact" class="nav-link cta-button">Contact</a></li>
       </ul>
       <div class="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </div>
     </div>
   </nav>
@@ -154,6 +177,612 @@
       </div>
     </div>
   </header>
+
+  <!-- One tile per unique destination. Edit titles, descriptions and hrefs here. -->
+  <section id="project-tiles" aria-labelledby="project-tiles-title">
+    <div class="pt-heading">
+      <h2 id="project-tiles-title">All Projects</h2>
+      <p class="pt-help"><span class="pt-desktop-copy">Hover to explore. Click to open.</span><span class="pt-touch-copy">Tap to flip. Tap again to open.</span></p>
+    </div>
+    <ul class="pt-grid" aria-label="Projects and pages">
+        <li>
+          <a class="pt-tile" href="bns.html" aria-label="Boundary n States 2: Explore boundaries and states in the second Boundary n States project.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Research</span><span class="pt-number">01</span></span>
+                <span class="pt-mark">B2</span>
+                <span class="pt-title">Boundary n States 2</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Boundary n States 2</span>
+                <span class="pt-description">Explore boundaries and states in the second Boundary n States project.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="feature-selection-lab.html" aria-label="Boundary n States: Explore feature selection, boundaries, and states in the original lab.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Research</span><span class="pt-number">02</span></span>
+                <span class="pt-mark">BS</span>
+                <span class="pt-title">Boundary n States</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Boundary n States</span>
+                <span class="pt-description">Explore feature selection, boundaries, and states in the original lab.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="net_june_16.html" aria-label="NET Benchmark: Open the June 16 NET benchmark practice page.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">03</span></span>
+                <span class="pt-mark">NB</span>
+                <span class="pt-title">NET Benchmark</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NET Benchmark</span>
+                <span class="pt-description">Open the June 16 NET benchmark practice page.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="bb.html" aria-label="Black Bone: Explore the Black Bone project and its main workspace.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Project</span><span class="pt-number">04</span></span>
+                <span class="pt-mark">BB</span>
+                <span class="pt-title">Black Bone</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Black Bone</span>
+                <span class="pt-description">Explore the Black Bone project and its main workspace.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="original.html" aria-label="O for Original: Open the project page titled O for Original.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Project</span><span class="pt-number">05</span></span>
+                <span class="pt-mark">O</span>
+                <span class="pt-title">O for Original</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">O for Original</span>
+                <span class="pt-description">Open the project page titled O for Original.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="index.html" aria-label="Home: Return to Adnan Bashir’s homepage and an overview of his work.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">About</span><span class="pt-number">06</span></span>
+                <span class="pt-mark">AB</span>
+                <span class="pt-title">Home</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Home</span>
+                <span class="pt-description">Return to Adnan Bashir’s homepage and an overview of his work.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="journey.html" aria-label="Journey: Follow the academic and professional journey behind the work.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">About</span><span class="pt-number">07</span></span>
+                <span class="pt-mark">J</span>
+                <span class="pt-title">Journey</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Journey</span>
+                <span class="pt-description">Follow the academic and professional journey behind the work.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="interests.html" aria-label="Interests: Discover personal interests and topics beyond the main projects.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">About</span><span class="pt-number">08</span></span>
+                <span class="pt-mark">IN</span>
+                <span class="pt-title">Interests</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Interests</span>
+                <span class="pt-description">Discover personal interests and topics beyond the main projects.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="projects.html" aria-label="Projects: Browse the main collection of projects and experiments.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Portfolio</span><span class="pt-number">09</span></span>
+                <span class="pt-mark">PR</span>
+                <span class="pt-title">Projects</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Projects</span>
+                <span class="pt-description">Browse the main collection of projects and experiments.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="publications.html" aria-label="Publications: Explore research papers and published work.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Research</span><span class="pt-number">10</span></span>
+                <span class="pt-mark">PB</span>
+                <span class="pt-title">Publications</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Publications</span>
+                <span class="pt-description">Explore research papers and published work.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="research.html" aria-label="Research: Learn about research interests, questions, and ongoing work.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Research</span><span class="pt-number">11</span></span>
+                <span class="pt-mark">RE</span>
+                <span class="pt-title">Research</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Research</span>
+                <span class="pt-description">Learn about research interests, questions, and ongoing work.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="teaching.html" aria-label="Teaching: Explore teaching, courses, and learning resources.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Teaching</span><span class="pt-number">12</span></span>
+                <span class="pt-mark">TE</span>
+                <span class="pt-title">Teaching</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Teaching</span>
+                <span class="pt-description">Explore teaching, courses, and learning resources.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="nts.html" aria-label="NTS: Open the NTS test preparation page.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">13</span></span>
+                <span class="pt-mark">NT</span>
+                <span class="pt-title">NTS</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NTS</span>
+                <span class="pt-description">Open the NTS test preparation page.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="net_last.html" aria-label="NET Last: Open the NET practice version labeled NET Last.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">14</span></span>
+                <span class="pt-mark">NL</span>
+                <span class="pt-title">NET Last</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NET Last</span>
+                <span class="pt-description">Open the NET practice version labeled NET Last.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="choices.html" aria-label="NET 2: Explore the NET practice version with answer choices.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">15</span></span>
+                <span class="pt-mark">N2</span>
+                <span class="pt-title">NET 2</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NET 2</span>
+                <span class="pt-description">Explore the NET practice version with answer choices.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="no_choices.html" aria-label="NET 1: Explore the NET practice version without answer choices.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">16</span></span>
+                <span class="pt-mark">N1</span>
+                <span class="pt-title">NET 1</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NET 1</span>
+                <span class="pt-description">Explore the NET practice version without answer choices.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="zarb.html" aria-label="Zarb BPM: Explore rhythm and beats per minute with Zarb.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Music</span><span class="pt-number">17</span></span>
+                <span class="pt-mark">ZB</span>
+                <span class="pt-title">Zarb BPM</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Zarb BPM</span>
+                <span class="pt-description">Explore rhythm and beats per minute with Zarb.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="net_latest.html" aria-label="Net Prep 1: Open the NET preparation page labeled Net Prep 1.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">18</span></span>
+                <span class="pt-mark">NP</span>
+                <span class="pt-title">Net Prep 1</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Net Prep 1</span>
+                <span class="pt-description">Open the NET preparation page labeled Net Prep 1.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="net_june_16_checker.html" aria-label="Benchmark Checker: Open the checker associated with the June 16 NET benchmark.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">19</span></span>
+                <span class="pt-mark">BC</span>
+                <span class="pt-title">Benchmark Checker</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Benchmark Checker</span>
+                <span class="pt-description">Open the checker associated with the June 16 NET benchmark.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="BuySell_Marketing_Lab.html" aria-label="Crypto by Bilal: Explore Bilal’s crypto buy-and-sell lab.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Project</span><span class="pt-number">20</span></span>
+                <span class="pt-mark">CB</span>
+                <span class="pt-title">Crypto by Bilal</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Crypto by Bilal</span>
+                <span class="pt-description">Explore Bilal’s crypto buy-and-sell lab.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="NET_easy_june_24.html" aria-label="NET June 24: Open the June 24 NET practice version.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">21</span></span>
+                <span class="pt-mark">24</span>
+                <span class="pt-title">NET June 24</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NET June 24</span>
+                <span class="pt-description">Open the June 24 NET practice version.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="NET_easy_june_24a.html" aria-label="NET June 24 · A: Open the alternate A version of the June 24 NET practice page.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">22</span></span>
+                <span class="pt-mark">24A</span>
+                <span class="pt-title">NET June 24 · A</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NET June 24 · A</span>
+                <span class="pt-description">Open the alternate A version of the June 24 NET practice page.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="ncsa_4.html" aria-label="NCSA Demo: Explore the National Cyber Security Academy demonstration.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Demo</span><span class="pt-number">23</span></span>
+                <span class="pt-mark">NC</span>
+                <span class="pt-title">NCSA Demo</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NCSA Demo</span>
+                <span class="pt-description">Explore the National Cyber Security Academy demonstration.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="net.html" aria-label="NET Benchmark · Main: Open the separate NET benchmark page at net.html.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">24</span></span>
+                <span class="pt-mark">NET</span>
+                <span class="pt-title">NET Benchmark · Main</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">NET Benchmark · Main</span>
+                <span class="pt-description">Open the separate NET benchmark page at net.html.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="final.html" aria-label="Last: Open the project version labeled Last.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Project</span><span class="pt-number">25</span></span>
+                <span class="pt-mark">LS</span>
+                <span class="pt-title">Last</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Last</span>
+                <span class="pt-description">Open the project version labeled Last.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="fast.html" aria-label="FAST: Open the FAST preparation page.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">26</span></span>
+                <span class="pt-mark">FA</span>
+                <span class="pt-title">FAST</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">FAST</span>
+                <span class="pt-description">Open the FAST preparation page.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="air.html" aria-label="AIR: Open the AIR preparation page.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Test prep</span><span class="pt-number">27</span></span>
+                <span class="pt-mark">AU</span>
+                <span class="pt-title">AIR</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">AIR</span>
+                <span class="pt-description">Open the AIR preparation page.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="pdfs/notes.html" aria-label="Notes: Browse the notes page and its study materials.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Resources</span><span class="pt-number">28</span></span>
+                <span class="pt-mark">NO</span>
+                <span class="pt-title">Notes</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Notes</span>
+                <span class="pt-description">Browse the notes page and its study materials.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="ce.html" aria-label="Cantt Events: Explore the Cantt Events page.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Events</span><span class="pt-number">29</span></span>
+                <span class="pt-mark">CE</span>
+                <span class="pt-title">Cantt Events</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Cantt Events</span>
+                <span class="pt-description">Explore the Cantt Events page.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="speedtest.html" aria-label="Raftaar: Open Raftaar, the speed-test page.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Utility</span><span class="pt-number">30</span></span>
+                <span class="pt-mark">RA</span>
+                <span class="pt-title">Raftaar</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Raftaar</span>
+                <span class="pt-description">Open Raftaar, the speed-test page.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="scale.html" aria-label="Scale: Explore the project page titled Scale.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Project</span><span class="pt-number">31</span></span>
+                <span class="pt-mark">SC</span>
+                <span class="pt-title">Scale</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Scale</span>
+                <span class="pt-description">Explore the project page titled Scale.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="games.html" aria-label="Games: Browse games and interactive activities.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Play</span><span class="pt-number">32</span></span>
+                <span class="pt-mark">GA</span>
+                <span class="pt-title">Games</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Games</span>
+                <span class="pt-description">Browse games and interactive activities.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="memes.html" aria-label="Memes: Explore the collection of memes and humor.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Creative</span><span class="pt-number">33</span></span>
+                <span class="pt-mark">ME</span>
+                <span class="pt-title">Memes</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Memes</span>
+                <span class="pt-description">Explore the collection of memes and humor.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="drawings.html" aria-label="Drawings: Browse drawings and creative work.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Creative</span><span class="pt-number">34</span></span>
+                <span class="pt-mark">DR</span>
+                <span class="pt-title">Drawings</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Drawings</span>
+                <span class="pt-description">Browse drawings and creative work.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="pt-tile" href="gallery.html" aria-label="Gallery: Explore the visual gallery and image collection.">
+            <span class="pt-inner">
+              <span class="pt-face pt-front" aria-hidden="true">
+                <span class="pt-meta"><span class="pt-category">Creative</span><span class="pt-number">35</span></span>
+                <span class="pt-mark">GL</span>
+                <span class="pt-title">Gallery</span>
+                <span class="pt-cue"><span class="pt-desktop-copy">Explore</span><span class="pt-touch-copy">Tap to flip</span><span class="pt-rotate">↻</span></span>
+              </span>
+              <span class="pt-face pt-back" aria-hidden="true">
+                <span class="pt-title">Gallery</span>
+                <span class="pt-description">Explore the visual gallery and image collection.</span>
+                <span class="pt-open">Open page <span>↗</span></span>
+              </span>
+            </span>
+          </a>
+        </li>
+    </ul>
+  </section>
+
 
   <section class="featured-section">
     <div class="container">
@@ -341,6 +970,55 @@
       </div>
     </div>
   </footer>
+
+  <script id="project-tiles-script">
+    (() => {
+      'use strict';
+      const grid = document.getElementById('project-tiles');
+      if (!grid) return;
+      const tiles = [...grid.querySelectorAll('.pt-tile')];
+      let pointerType = '';
+      const reset = (except = null) => {
+        tiles.forEach(tile => {
+          if (tile !== except) tile.classList.remove('is-flipped', 'is-dismissed');
+        });
+      };
+      grid.addEventListener('pointerdown', event => { pointerType = event.pointerType; });
+      grid.addEventListener('click', event => {
+        const tile = event.target.closest('.pt-tile');
+        if (!tile || event.defaultPrevented) return;
+        // Keep keyboard activation, middle-click, and modified links native.
+        if (event.detail === 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        const kind = event.pointerType || pointerType;
+        if (kind !== 'touch' && kind !== 'pen' && !window.matchMedia('(hover: none)').matches) return;
+        if (!tile.classList.contains('is-flipped')) {
+          event.preventDefault();
+          reset(tile);
+          tile.classList.remove('is-dismissed');
+          tile.classList.add('is-flipped');
+        }
+      });
+      document.addEventListener('pointerdown', event => {
+        if (!grid.contains(event.target)) reset();
+      });
+      grid.addEventListener('keydown', event => {
+        pointerType = '';
+        if (event.key !== 'Escape') return;
+        const tile = event.target.closest('.pt-tile');
+        if (tile) {
+          tile.classList.remove('is-flipped');
+          tile.classList.add('is-dismissed');
+        }
+      });
+      tiles.forEach(tile => {
+        tile.addEventListener('pointerenter', () => tile.classList.remove('is-dismissed'));
+        tile.addEventListener('pointerleave', event => {
+          if (event.pointerType === 'mouse') tile.classList.remove('is-flipped', 'is-dismissed');
+        });
+        tile.addEventListener('blur', () => tile.classList.remove('is-flipped', 'is-dismissed'));
+      });
+    })();
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
